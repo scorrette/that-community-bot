@@ -1,0 +1,5 @@
+# Ignore the environment setup (local)
+.env
+
+# Ignore logs folder and contents (local)
+logs
