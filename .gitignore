@@ -3,3 +3,6 @@
 
 # Ignore logs folder and contents (local)
 logs
+
+# Ignore database files
+*.db
