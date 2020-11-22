@@ -50,9 +50,9 @@ def set_prefix(bot, ctx):
 
 bot = commands.Bot(command_prefix=set_prefix)
 
-@bot.command()
+@bot.command(help="Change the prefix of this bot on your server")
+@commands.has_permissions(manage_guild=True)
 async def prefix(ctx, prefix):
-    print("Attempting to change prefix for guild: ", ctx.guild.id, " to ", prefix)
     with closing(sqlite3.connect('guild_config.db')) as db:
         with closing(db.cursor()) as c:
             c.execute('''SELECT *
@@ -60,21 +60,26 @@ async def prefix(ctx, prefix):
                          WHERE guild_id=?
                       ''', (ctx.guild.id,))
             if c.fetchone() == None:
-                print("Guild was not previously found in the database, adding both guild id and prefix")
                 c.execute('''INSERT INTO guild_settings
                              VALUES (?, ?)
                           ''', (ctx.guild.id, prefix,))
-                print("Successfully changed prefix to ", prefix, " for ", ctx.guild.id)
             else:
-                print("Guild found previously in database, updating prefix")
-                c.execute('''INSERT INTO guild_settings
-                             VALUES (?)
+                c.execute('''UPDATE guild_settings
+                             SET prefix=?
                              WHERE guild_id=?
                           ''', (prefix, ctx.guild.id,))
-                print("Successfully changed prefix to ", prefix, " for ", ctx.guild.id)
         db.commit()
+    
+    msg = "Successfully changed prefix to `" + prefix + "`"
+    await ctx.channel.send(msg)
 
-@bot.command()
+@prefix.error
+async def prefix_error(error, ctx):
+    if isinstance(error, commands.MissingPermissions):
+        msg = "You do not have permission to do that!"
+        await ctx.channel.send(msg)
+
+@bot.command(help="Cute dancing snom (server must have the emote)")
 async def snom(ctx):
     msg = '<a:snomdance:779428824777228289>'
     await ctx.channel.send(msg)
