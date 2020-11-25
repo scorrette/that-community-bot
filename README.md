@@ -16,5 +16,7 @@ DISCORD_TOKEN=<discord-bot-token>
 ```
 Where `<discord-bot-token>` would be replaced with your particular bot token.
 
+Then run `bot.py` using `python3 bot.py`
+
 ## Contributing
 If you are currently a member of the ECE discord and would like to contribute, please look for any currently open issues or submit a pull request with a feature you would like to have added!
