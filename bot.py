@@ -34,23 +34,26 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 def set_prefix(bot, ctx):
     prefix = '!'
+    guild_prefix = None
 
-    with closing(sqlite3.connect('guild_config.db')) as db:
-        with closing(db.cursor()) as c:
-            c.execute('''SELECT prefix
-                         FROM guild_settings
-                         WHERE guild_id=?
-                      ''', (ctx.guild.id,))
-            try:
-                guild_prefix = c.fetchone()[0]
-            except:
-                guild_prefix = None
+    if ctx.guild is not None:
+        with closing(sqlite3.connect('guild_config.db')) as db:
+            with closing(db.cursor()) as c:
+                c.execute('''SELECT prefix
+                             FROM guild_settings
+                             WHERE guild_id=?
+                        ''', (ctx.guild.id,))
+                try:
+                    guild_prefix = c.fetchone()[0]
+                except:
+                    pass
     
     return prefix if guild_prefix == None else guild_prefix
 
 bot = commands.Bot(command_prefix=set_prefix)
 
 @bot.command(help="Change the prefix of this bot on your server")
+@commands.guild_only()
 @commands.has_permissions(manage_guild=True)
 async def prefix(ctx, prefix):
     with closing(sqlite3.connect('guild_config.db')) as db:
@@ -74,12 +77,15 @@ async def prefix(ctx, prefix):
     await ctx.channel.send(msg)
 
 @prefix.error
-async def prefix_error(error, ctx):
+async def prefix_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
-        msg = "You do not have permission to do that!"
+        msg = ":x: You do not have permission to do that!"
+        await ctx.channel.send(msg)
+    elif isinstance(error, commands.NoPrivateMessage):
+        msg = ":x: You can't use that command in my DMs!"
         await ctx.channel.send(msg)
 
-@bot.command(help="Cute dancing snom (server must have the emote)")
+@bot.command(help="Cute dancing snom")
 async def snom(ctx):
     msg = '<a:snomdance:779428824777228289>'
     await ctx.channel.send(msg)
