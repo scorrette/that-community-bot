@@ -94,4 +94,8 @@ async def snom(ctx):
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
 
+@bot.event
+async def on_message_edit(before, after):
+    await bot.process_commands(after)
+
 bot.run(TOKEN)
