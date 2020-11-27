@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
 
-class Miscellaneous(commands.Cog):
+class Info(commands.Cog):
     def __init__(self, client):
         self.client = client
 
 def setup(client):
-    client.add_cog(Miscellaneous(client))
+    client.add_cog(Info(client))
