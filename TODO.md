@@ -1,7 +1,7 @@
 # TODO
 
 ## General Bot Setup
-- [ ] Integrate Cogs
+- [x] Integrate Cogs
 : Make it easier to develop code as well as make it easier to read
 
 - [ ] Update default prefix to `e!`
@@ -10,11 +10,9 @@
 ## Features
 Each category below should be made as its own Cog
 
-### Setup
+### Admin
 - [x] `e!prefix <prefix>`
 : Command used to change the prefix to `<prefix>` of the bot (guild only)
-
-### Admin
 - [ ] `e!stats`
 : Similar to ServerStats bot, command used to create stat based channel
 
