@@ -16,9 +16,9 @@ Each category below should be made as its own Cog
 : Similar to ServerStats bot, command used to create stat based channel
 
 ### Info
-- [ ] `e!ping`
+- [x] `e!ping`
 : Check bots response time
-- [ ] `e!uptime`
+- [x] `e!uptime`
 : Check how long the bot has been online
 
 ### Fun
