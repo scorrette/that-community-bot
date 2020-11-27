@@ -60,4 +60,8 @@ async def on_ready():
 async def on_message_edit(before, after):
     await bot.process_commands(after)
 
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'cogs.{filename[:-3]}')
+
 bot.run(TOKEN)
