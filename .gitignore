@@ -6,3 +6,6 @@ logs
 
 # Ignore database files
 *.db
+
+# Ignore any python caches
+__pycache__

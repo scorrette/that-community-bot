@@ -1,7 +1,7 @@
 # TODO
 
 ## General Bot Setup
-- [ ] Integrate Cogs
+- [x] Integrate Cogs
 : Make it easier to develop code as well as make it easier to read
 
 - [ ] Update default prefix to `e!`
