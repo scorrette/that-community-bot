@@ -85,11 +85,6 @@ async def prefix_error(ctx, error):
         msg = ":x: You can't use that command in my DMs!"
         await ctx.channel.send(msg)
 
-@bot.command(help="Cute dancing snom")
-async def snom(ctx):
-    msg = '<a:snomdance:779428824777228289>'
-    await ctx.channel.send(msg)
-
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
