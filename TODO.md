@@ -3,7 +3,7 @@
 ## General Bot Setup
 - [x] Integrate Cogs
 : Make it easier to develop code as well as make it easier to read
-- [ ] Update default prefix to `e!`
+- [x] Update default prefix to `e!`
 : Have a default prefix that can be used in conjuction with a custom server prefix
 
 ## Features

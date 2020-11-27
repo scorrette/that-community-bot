@@ -33,8 +33,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 def set_prefix(bot, ctx):
-    prefix = '!'
-    guild_prefix = None
+    prefix = ('e!',)
 
     if ctx.guild is not None:
         with closing(sqlite3.connect('guild_config.db')) as db:
@@ -44,11 +43,11 @@ def set_prefix(bot, ctx):
                              WHERE guild_id=?
                         ''', (ctx.guild.id,))
                 try:
-                    guild_prefix = c.fetchone()[0]
+                    prefix += (c.fetchone()[0],)
                 except:
                     pass
     
-    return prefix if guild_prefix == None else guild_prefix
+    return prefix
 
 bot = commands.Bot(command_prefix=set_prefix)
 
