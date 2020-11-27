@@ -10,11 +10,9 @@
 ## Features
 Each category below should be made as its own Cog
 
-### Setup
+### Admin
 - [x] `e!prefix <prefix>`
 : Command used to change the prefix to `<prefix>` of the bot (guild only)
-
-### Admin
 - [ ] `e!stats`
 : Similar to ServerStats bot, command used to create stat based channel
 
