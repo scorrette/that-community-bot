@@ -14,7 +14,7 @@ class Info(commands.Cog):
         minutes, seconds = divmod((uptime_now - self.uptime_start).total_seconds(), 60)
         hours, minutes = divmod(minutes, 60)
         days, hours = divmod(hours, 24)
-        await ctx.send(f'Up for {days} days, {hours} hours, {minutes} minutes, and {seconds} seconds')
+        await ctx.send(f'Up for {int(days)} days, {int(hours)} hours, {int(minutes)} minutes, and {seconds:.{2}f} seconds')
 
 def setup(client):
     client.add_cog(Info(client))
