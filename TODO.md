@@ -19,29 +19,23 @@ Each category below should be made as its own Cog
 ### Info
 - [ ] `e!ping`
 : Check bots response time
-
 - [ ] `e!uptime`
 : Check how long the bot has been online
 
 ### Fun
 - [x] `e!snom`
 : Sends a dancing snom emote
-
 - [ ] `e!ecejoke`
 : Display a random ece-related joke
-
 - [ ] `e!yay`
 : Send a gif, have a party
 
 ### Miscellanous
 - [ ] `e!rank <opt arg>`
 : Similar to MEE6 bot, displays rank on server (`<opt arg>` could be another user)
-
 - [ ] `e!roll <sides>`
 : Rolls a `<sides>` sided dice
-
 - [ ] `e!flip`
 : Flip a coin
-
 - [ ] `e!convert <value> <from-unit> <to-unit>`
 : Convert a measurement in one unit to another unit
