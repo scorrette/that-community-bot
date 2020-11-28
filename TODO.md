@@ -32,9 +32,9 @@ Each category below should be made as its own Cog
 ### Miscellanous
 - [ ] `e!rank <opt arg>`
 : Similar to MEE6 bot, displays rank on server (`<opt arg>` could be another user)
-- [ ] `e!roll <sides>`
+- [x] `e!roll <sides>`
 : Rolls a `<sides>` sided dice
-- [ ] `e!flip`
+- [x] `e!flip`
 : Flip a coin
 - [ ] `e!convert <value> <from-unit> <to-unit>`
 : Convert a measurement in one unit to another unit
