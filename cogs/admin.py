@@ -22,7 +22,15 @@ class Admin(commands.Cog):
                     c.execute('''UPDATE guild_settings
                                  SET prefix=?
                                  WHERE guild_id=?
-                            ''', (prefix, ctx.guild.id,))
+                              ''', (prefix, ctx.guild.id,))
+                except sqlite3.OperationalError:
+                    c.execute('''CREATE TABLE guild_settings
+                                 (guild_id INTEGER PRIMARY KEY UNIQUE NOT NULL,
+                                  prefix TEXT)
+                              ''')
+                    c.execute('''INSERT INTO guild_settings
+                                 VALUES (?, ?)
+                              ''', (ctx.guild.id, prefix,))
             db.commit()
     
         msg = "Successfully changed prefix to `" + prefix + "`"

@@ -7,13 +7,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from contextlib import closing
 
-with closing(sqlite3.connect('guild_config.db')) as db:
-    with closing(db.cursor()) as c:
-        c.execute('''CREATE TABLE IF NOT EXISTS guild_settings
-                     (guild_id INTEGER PRIMARY KEY UNIQUE NOT NULL,
-                      prefix TEXT)
-                  ''')
-
 def setup_logger(log_name, log_file, level=logging.WARNING):
     logger = logging.getLogger(log_name)
     logger.setLevel(level)
@@ -38,14 +31,17 @@ def set_prefix(bot, ctx):
     if ctx.guild is not None:
         with closing(sqlite3.connect('guild_config.db')) as db:
             with closing(db.cursor()) as c:
-                c.execute('''SELECT prefix
-                             FROM guild_settings
-                             WHERE guild_id=?
-                        ''', (ctx.guild.id,))
                 try:
+                    c.execute('''SELECT prefix
+                                 FROM guild_settings
+                                 WHERE guild_id=?
+                              ''', (ctx.guild.id,))
                     prefix += (c.fetchone()[0],)
-                except:
-                    pass
+                except sqlite3.OperationalError:
+                    c.execute('''CREATE TABLE guild_settings
+                                 (guild_id INTEGER PRIMARY KEY UNIQUE NOT NULL,
+                                  prefix TEXT)
+                              ''')
     
     return prefix
 
