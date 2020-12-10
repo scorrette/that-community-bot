@@ -9,19 +9,19 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def load(self, ctx, cog):
-        self.client.load_extension(f'cogs.{cog}')
+        self.client.load_extension(f'cogs.{cog.lower()}')
         await ctx.send('Cog has been successfully loaded.')
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def unload(self, ctx, cog):
-        self.client.unload_extension(f'cogs.{cog}')
+        self.client.unload_extension(f'cogs.{cog.lower()}')
         await ctx.send('Cog has been successfully unloaded.')
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def reload(self, ctx, cog):
-        self.client.reload_extension(f'cogs.{cog}')
+        self.client.reload_extension(f'cogs.{cog.lower()}')
         await ctx.send('Cog has been successfully reloaded.')
 
     @load.error

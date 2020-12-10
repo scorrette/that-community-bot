@@ -49,7 +49,7 @@ def set_prefix(bot, ctx):
     
     return prefix
 
-bot = commands.Bot(command_prefix=set_prefix)
+bot = commands.Bot(command_prefix = set_prefix, case_insensitive = True)
 
 @bot.event
 async def on_ready():
