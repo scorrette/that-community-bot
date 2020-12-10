@@ -67,7 +67,7 @@ def update_counter(ctx):
     with closing(sqlite3.connect(DATABASE)) as db:
         with closing(db.cursor()) as c:
             try:
-                c.execute('''SELECT word FROM counters
+                c.execute('''SELECT word, count FROM counters
                              WHERE user_id=?
                           ''', (ctx.author.id,))
                 
@@ -76,9 +76,11 @@ def update_counter(ctx):
                     if row[0] in ctx.content.split():
                         c.execute('''UPDATE counters
                                      SET count=count + 1
-                                     WHERE user_id =?
+                                     WHERE user_id=?
                                      AND word=?
                                   ''', (ctx.author.id, row[0]))
+
+                        ctx.send(f'{ctx.author}\'s **{row[0]}** count: {row[1]}')
             except sqlite3.OperationalError:
                 c.execute('''CREATE TABLE counters
                              (user_id INTEGER PRIMARY KEY NOT NULL,
