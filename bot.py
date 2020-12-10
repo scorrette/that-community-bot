@@ -30,7 +30,7 @@ def set_prefix(bot, ctx):
     prefix = ('e!',)
 
     if ctx.guild is not None:
-        prefix += get_prefix(ctx.guild.id)
+        prefix += get_prefix(ctx)
     
     return prefix
 

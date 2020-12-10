@@ -7,7 +7,7 @@ from contextlib import closing
 load_dotenv(find_dotenv())
 DATABASE = os.getenv('DATABASE')
 
-def get_prefix(guild_id):
+def get_prefix(ctx):
     prefix = tuple()
 
     with closing(sqlite3.connect(DATABASE)) as db:
@@ -16,7 +16,7 @@ def get_prefix(guild_id):
                 c.execute('''SELECT prefix
                              FROM guild_settings
                              WHERE guild_id=?
-                          ''', (guild_id,))
+                          ''', (ctx.guild.id,))
                 prefix += (c.fetchone()[0],)
             except sqlite3.OperationalError:
                 c.execute('''CREATE TABLE guild_settings

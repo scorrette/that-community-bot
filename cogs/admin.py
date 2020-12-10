@@ -13,7 +13,7 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
     async def prefix(self, ctx, prefix):
-        success = update_prefix(ctx.guild.id, prefix)
+        success = update_prefix(ctx, prefix)
     
         if success:
             msg = "Successfully changed prefix to `" + prefix + "`"
