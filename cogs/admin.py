@@ -14,15 +14,11 @@ class Admin(commands.Cog):
     async def prefix(self, ctx, prefix):
         with closing(sqlite3.connect('guild_config.db')) as db:
             with closing(db.cursor()) as c:
-                c.execute('''SELECT *
-                             FROM guild_settings
-                             WHERE guild_id=?
-                          ''', (ctx.guild.id,))
-                if c.fetchone() == None:
+                try:
                     c.execute('''INSERT INTO guild_settings
                                  VALUES (?, ?)
                               ''', (ctx.guild.id, prefix,))
-                else:
+                except sqlite3.IntegrityError:
                     c.execute('''UPDATE guild_settings
                                  SET prefix=?
                                  WHERE guild_id=?
