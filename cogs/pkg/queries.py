@@ -35,7 +35,7 @@ def update_prefix(ctx, prefix):
     
     return success
 
-def set_counter(ctx, word):
+async def set_counter(ctx, word):
     success = True
 
     with closing(sqlite3.connect(DATABASE)) as db:
@@ -44,8 +44,9 @@ def set_counter(ctx, word):
                 c.execute('''INSERT INTO counters
                              VALUES (?, ?)
                           ''', (ctx.author.id, word,))
+                await ctx.send(f'Successfully set a counter for {ctx.author}: **{word}**.')
             except sqlite3.IntegrityError:
-                ctx.send('You already have a counter set for this word.')
+                await ctx.send('You already have a counter set for this word.')
             except sqlite3.OperationalError:
                 c.execute('''CREATE TABLE counters
                              (user_id INTEGER PRIMARY KEY NOT NULL,
@@ -61,7 +62,7 @@ def set_counter(ctx, word):
 
     return success
 
-def update_counter(ctx):
+async def update_counter(ctx):
     success = True
 
     with closing(sqlite3.connect(DATABASE)) as db:
@@ -80,7 +81,7 @@ def update_counter(ctx):
                                      AND word=?
                                   ''', (ctx.author.id, row[0]))
 
-                        ctx.send(f'{ctx.author}\'s **{row[0]}** count: {row[1]}')
+                        await ctx.send(f'{ctx.author}\'s **{row[0]}** count: {row[1]}')
             except sqlite3.OperationalError:
                 c.execute('''CREATE TABLE counters
                              (user_id INTEGER PRIMARY KEY NOT NULL,
@@ -93,7 +94,7 @@ def update_counter(ctx):
 
     return success
 
-def remove_counter(ctx, word):
+async def remove_counter(ctx, word):
     success = True
 
     with closing(sqlite3.connect(DATABASE)) as db:
@@ -105,9 +106,9 @@ def remove_counter(ctx, word):
                           ''', (ctx.author.id, word))
                 
                 if c.rowcount == 0:
-                    ctx.send('This word was not being counted.')
+                    await ctx.send('This word was not being counted.')
                 else:
-                    ctx.send('Successfully removed counter.')
+                    await ctx.send('Successfully removed counter.')
             except sqlite3.OperationalError:
                 c.execute('''CREATE TABLE counters
                              (user_id INTEGER PRIMARY KEY NOT NULL,

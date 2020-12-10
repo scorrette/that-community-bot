@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 from time import perf_counter
+from pkg.queries import set_counter, update_counter, remove_counter
 
 class Info(commands.Cog):
     def __init__(self, bot):
@@ -26,6 +27,20 @@ class Info(commands.Cog):
         response_time = round((perf_counter() - now) * 1000, 2)
 
         await response.edit(content=response.content + f' Response time {response_time} ms.')
+
+    @commands.command(help="Track what you say")
+    async def counter(self, ctx, op, word):
+        if op.lower() == 'add':
+            set_counter(ctx, word)
+        elif op.lower() == 'remove':
+            remove_counter(ctx, word)
+        else:
+            await ctx.send('First parameter must be either `add` or `remove`.')
+
+    @counter.error
+    async def counter_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send('Usage: `e!counter add/remove <word>`')
 
 def setup(bot):
     bot.add_cog(Info(bot))
