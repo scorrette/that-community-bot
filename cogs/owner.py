@@ -3,25 +3,25 @@ import discord
 from discord.ext import commands
 
 class Owner(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def load(self, ctx, cog):
-        self.client.load_extension(f'cogs.{cog.lower()}')
+        self.bot.load_extension(f'cogs.{cog.lower()}')
         await ctx.send('Cog has been successfully loaded.')
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def unload(self, ctx, cog):
-        self.client.unload_extension(f'cogs.{cog.lower()}')
+        self.bot.unload_extension(f'cogs.{cog.lower()}')
         await ctx.send('Cog has been successfully unloaded.')
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def reload(self, ctx, cog):
-        self.client.reload_extension(f'cogs.{cog.lower()}')
+        self.bot.reload_extension(f'cogs.{cog.lower()}')
         await ctx.send('Cog has been successfully reloaded.')
 
     @load.error
@@ -47,5 +47,5 @@ class Owner(commands.Cog):
         else:
             await ctx.send(f'Some kind of error occured: `{type(error).__name__}: {error}`. Either report this as a bug or move on.')
 
-def setup(client):
-    client.add_cog(Owner(client))
+def setup(bot):
+    bot.add_cog(Owner(bot))

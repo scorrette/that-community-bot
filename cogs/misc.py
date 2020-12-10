@@ -4,8 +4,8 @@ from discord.ext import commands
 from random import randint
 
 class Miscellaneous(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
     
     @commands.command(help="Flip a coin!")
     async def flip(self, ctx):
@@ -21,5 +21,5 @@ class Miscellaneous(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Please input the number of sides of the die. Ex: `e!roll 6` to roll a six-sided die")
 
-def setup(client):
-    client.add_cog(Miscellaneous(client))
+def setup(bot):
+    bot.add_cog(Miscellaneous(bot))

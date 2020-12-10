@@ -5,8 +5,8 @@ from datetime import datetime
 from time import perf_counter
 
 class Info(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
         self.uptime_start = datetime.now()
 
     @commands.command(help="Check the bots uptime")
@@ -19,7 +19,7 @@ class Info(commands.Cog):
     
     @commands.command(help="Latency check for the bot")
     async def ping(self, ctx):
-        api_time = round(self.client.latency * 1000, 2)
+        api_time = round(self.bot.latency * 1000, 2)
 
         now = perf_counter()
         response = await ctx.send(f'Pong! API time {api_time} ms.')
@@ -27,5 +27,5 @@ class Info(commands.Cog):
 
         await response.edit(content=response.content + f' Response time {response_time} ms.')
 
-def setup(client):
-    client.add_cog(Info(client))
+def setup(bot):
+    bot.add_cog(Info(bot))
