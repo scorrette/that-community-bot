@@ -1,18 +1,10 @@
 #!/usr/bin/python3
 import os
 import logging
-import sqlite3
 
 from discord.ext import commands
 from dotenv import load_dotenv
-from contextlib import closing
-
-with closing(sqlite3.connect('guild_config.db')) as db:
-    with closing(db.cursor()) as c:
-        c.execute('''CREATE TABLE IF NOT EXISTS guild_settings
-                     (guild_id INTEGER PRIMARY KEY UNIQUE NOT NULL,
-                      prefix TEXT)
-                  ''')
+from pkg.queries import get_prefix
 
 def setup_logger(log_name, log_file, level=logging.WARNING):
     logger = logging.getLogger(log_name)
@@ -36,16 +28,7 @@ def set_prefix(bot, ctx):
     prefix = ('e!',)
 
     if ctx.guild is not None:
-        with closing(sqlite3.connect('guild_config.db')) as db:
-            with closing(db.cursor()) as c:
-                c.execute('''SELECT prefix
-                             FROM guild_settings
-                             WHERE guild_id=?
-                        ''', (ctx.guild.id,))
-                try:
-                    prefix += (c.fetchone()[0],)
-                except:
-                    pass
+        prefix += get_prefix(ctx)
     
     return prefix
 
