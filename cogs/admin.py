@@ -1,8 +1,6 @@
 import discord
-import sqlite3
 
 from discord.ext import commands
-from contextlib import closing
 from pkg.queries import update_prefix
 
 class Admin(commands.Cog):

@@ -9,3 +9,9 @@ logs
 
 # Ignore any python caches
 __pycache__
+
+# Ignore test stuff
+*test*
+
+# Ignore vscode
+.vscode
