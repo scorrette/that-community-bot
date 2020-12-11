@@ -13,8 +13,10 @@ pip3 install -U python-dotenv
 Create a `.env` file in the same directory as the code that contains the following information:
 ```
 DISCORD_TOKEN=<discord-bot-token>
+DATABASE=<path-to-db-file>
 ```
 Where `<discord-bot-token>` would be replaced with your particular bot token.
+Where `<path-to-db-file>` would be replaced with a local path to where you would like the database file to be saved.
 
 Then run `bot.py` using `python3 bot.py`
 
