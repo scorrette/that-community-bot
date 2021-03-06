@@ -1,4 +1,4 @@
-# That Catchall Bot (TCB)
+# That Community Bot (TCB)
 
 The TCB discord bot is currently being designed to fit some odds and ends of features any community may want on their discord server.
 
