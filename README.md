@@ -1,6 +1,6 @@
-# ECE Bot
+# That Catchall Bot (TCB)
 
-The ECE discord bot is currently being designed to fit some odds and ends of features the ECE community may want on the discord server.
+The TCB discord bot is currently being designed to fit some odds and ends of features any community may want on their discord server.
 
 ## Usage
 
@@ -21,4 +21,4 @@ Where `<path-to-db-file>` would be replaced with a local path to where you would
 Then run `bot.py` using `python3 bot.py`
 
 ## Contributing
-If you are currently a member of the ECE discord and would like to contribute, please look for any currently open issues or submit a pull request with a feature you would like to have added!
+Please look for any currently open issues or submit a pull request with a feature you would like to have added!
