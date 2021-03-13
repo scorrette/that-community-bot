@@ -32,11 +32,13 @@ async def on_raw_reaction_add(reaction, member):
 
 @commands.Cog.listener()
 async def on_member_update(before, after):
-    for role in after.roles:
-        if role.id == 818549791009144892: #change new-member role ID
-            channel = member.guild.get_channel('818537648515448872') #change to rules channel ID
-            embed=discord.Embed(description=f"{after.mention}, welcome to Herphub! <@&479309565956063234>") #change helper role ID
-            await channel.send(embed=embed)
+    role = after.guild.get_role(818549791009144892) #change member role ID
+    if role in before.roles:
+        return
+    elif role in after.roles:
+        channel = after.guild.get_channel(818537648515448872) #change verification channel ID
+        embed=discord.Embed(description=f"{after.mention}, welcome to Herphub! <@&479309565956063234>") #change helper role ID
+        await channel.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Verify(bot))
