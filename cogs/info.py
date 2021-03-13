@@ -1,4 +1,5 @@
 import discord
+import re
 
 from discord.ext import commands
 from datetime import datetime
@@ -34,8 +35,19 @@ class Info(commands.Cog):
         # if none assume the user wants info about themselves
         if name == None:
             member = ctx.author
+        elif name[0:2] == '<@' and name[-1] == '>':
+            member = ctx.guild.get_member(int(name[3:-1]))
         else:
-            member = ctx.guild.get_member_named(name)
+            for guild_member in ctx.guild.members:
+                if(re.search(name, guild_member.name, re.IGNORECASE) or
+                   (not guild_member.nick == None and 
+                    re.search(name, guild_member.nick, re.IGNORECASE))):
+                    member = guild_member
+                    break
+
+        if member == None:
+            await ctx.send("User was not found.")
+            return
 
         roles = ''
         role_count = 0
@@ -50,7 +62,7 @@ class Info(commands.Cog):
             if role_count <= (len(member.roles) - 2) and role_count > 0:
                 roles += ', '
 
-        embed = discord.Embed(title=None, description=None, color=0x0000ff) 
+        embed = discord.Embed(title=None, description=None, color=0xba60f0) 
         embed.add_field(name="ID", value=member.id, inline=True)
         embed.add_field(name="Nickname", value=member.nick, inline=True)
         embed.add_field(name="Account Created", value=member.created_at.astimezone(timezone('US/Eastern')).strftime('%x %X %Z'), inline=False)
