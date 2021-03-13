@@ -37,6 +37,8 @@ class Info(commands.Cog):
             member = ctx.author
         elif name[0:2] == '<@' and name[-1] == '>':
             member = ctx.guild.get_member(int(name[3:-1]))
+        elif re.match('#\d{4}', name[-5:]):
+            member = ctx.guild.get_member_named(name)
         else:
             for guild_member in ctx.guild.members:
                 if(re.search(name, guild_member.name, re.IGNORECASE) or
@@ -67,7 +69,10 @@ class Info(commands.Cog):
         embed.add_field(name="Nickname", value=member.nick, inline=True)
         embed.add_field(name="Account Created", value=member.created_at.astimezone(timezone('US/Eastern')).strftime('%x %X %Z'), inline=False)
         embed.add_field(name="Join Date", value=member.joined_at.astimezone(timezone('US/Eastern')).strftime('%x %X %Z'), inline=False)
-        embed.add_field(name=f'Roles [{(len(member.roles) - 1)}]', value=roles, inline=False)
+        if len(member.roles) == 1:
+            embed.add_field(name=f'Roles [0]', value="No roles", inline=False)
+        else:
+            embed.add_field(name=f'Roles [{(len(member.roles) - 1)}]', value=roles, inline=False)
         embed.set_author(name=str(member), icon_url=str(member.avatar_url))
         embed.set_thumbnail(url=str(member.avatar_url))
 
