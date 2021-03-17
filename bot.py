@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os
+import discord
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -7,7 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix = 'tcb!', case_insensitive = True)
+intents = discord.Intents.default()
+intents.members = True
+
+bot = commands.Bot(command_prefix = 'tcb!', case_insensitive = True, intents=intents)
 
 @bot.event
 async def on_ready():
