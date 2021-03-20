@@ -43,11 +43,12 @@ class Fun(commands.Cog):
                     if len(options) < 2:
                         await ctx.send('Not enough options, quitting prematurely...')
                         return
-                    else:
-                        break
+                    else: break
                 else:
                     option = await self.bot.wait_for('message', timeout=60, check=check)
-                    options.append(option.content)
+                    if option.content.lower() in map(str.lower, options):
+                        await ctx.send('You\'ve already entered this option, try again.')
+                    else: options.append(option.content)
 
             embed = discord.Embed(title=None, description=None, color=0xba60f0)
 
