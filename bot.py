@@ -26,7 +26,7 @@ async def get_prefix(bot, ctx):
             _prefixes = await cur.fetchall()
 
             for prefix in _prefixes:
-                prefixes.extend(prefix)
+                prefixes += prefix
 
     return prefixes
 
@@ -34,7 +34,7 @@ async def set_prefix(bot, ctx):
     prefix = ('tcb!',)
 
     if ctx.guild is not None:
-        prefix.extend(get_prefix(bot, ctx))
+        prefix += await get_prefix(bot, ctx)
 
     return prefix
 
