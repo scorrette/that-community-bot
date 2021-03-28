@@ -12,7 +12,7 @@ class Admin(commands.Cog):
             if prefix == None:
                 await ctx.send('This command expects a prefix to be passed to it.')
         elif option.lower() == 'list':
-            print('bad')
+            return
         elif option.lower() == 'remove':
             if prefix == None:
                 await ctx.send('This command expects a prefix to be passed to it.')
