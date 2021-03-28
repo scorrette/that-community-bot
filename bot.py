@@ -17,7 +17,37 @@ DB = os.getenv('MYSQL_DB')
 intents = discord.Intents.default()
 intents.members = True
 
-bot = commands.Bot(command_prefix = 'tcb!', case_insensitive = True, intents=intents)
+async def get_prefix(bot, ctx):
+    prefixes = tuple()
+
+    async with bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f'SELECT `prefix` FROM `prefixes` WHERE `guild_id`={ctx.guild.id}')
+            _prefixes = await cur.fetchall()
+
+            for prefix in _prefixes:
+                prefixes.extend(prefix)
+
+    return prefixes
+
+async def set_prefix(bot, ctx):
+    prefix = ('tcb!',)
+
+    if ctx.guild is not None:
+        prefix.extend(get_prefix(bot, ctx))
+
+    return prefix
+
+bot = commands.Bot(command_prefix = set_prefix, case_insensitive = True, intents=intents)
+
+@commands.is_owner()
+@bot.command()
+async def query(ctx, *, q):
+    async with bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(q)
+            res = await cur.fetchall()
+            await ctx.send(str(res))
 
 @bot.event
 async def on_ready():
@@ -32,15 +62,6 @@ async def on_message_edit(before, after):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.channel.send(f'The command you entered does not exist. Use `tcb!help` to see a list of commands')
-
-@commands.is_owner()
-@bot.command()
-async def query(ctx, *, q):
-    async with bot.pool.acquire() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute(q)
-            res = await cur.fetchall()
-            await ctx.send(str(res))
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
