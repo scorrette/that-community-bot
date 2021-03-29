@@ -2,22 +2,27 @@ import discord
 
 from discord.ext import commands
 
-async def add_prefix(self, ctx, prefix):
+async def check_guild_table(self, ctx):
     async with self.bot.pool.acquire() as conn:
         async with conn.cursor() as cur:
-            print('generating query')
-            query = f"INSERT INTO `prefixes`(`guild_id`, `prefix`) VALUES ({ctx.guild.id}, '{prefix}')"
-            print(f'executing insert: {query}')
-            await cur.execute(query)
-            print('executing commit')
+            await cur.execute(f'SELECT * FROM `guilds` WHERE `guild_id`={ctx.guild.id}')
+
+            if cur.rowcount == 0:
+                await cur.execute(f'INSERT INTO `guilds`(`guild_id`) VALUES ({ctx.guild.id})')
+                await conn.commit()
+
+async def add_prefix(self, ctx, prefix):
+    await check_guild_table(self, ctx)
+
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f"INSERT INTO `prefixes`(`guild_id`, `prefix`) VALUES ({ctx.guild.id}, '{prefix}')")
             await conn.commit()
 
-    print('executing send')
     await ctx.send(f'`{prefix}` has been added to the prefix list.')
 
 async def list_prefixes(self, ctx):
     desc = "Below is a list of prefixes set for your server:\n"
-    embed = discord.Embed(title="Prefixes", description=desc, color=0xba60f0)
 
     async with self.bot.pool.acquire() as conn:
         async with conn.cursor() as cur:
@@ -25,10 +30,11 @@ async def list_prefixes(self, ctx):
             prefixes = await cur.fetchall()
 
             for i in range(len(prefixes)):
-                desc += prefixes[i]
+                desc += prefixes[i][0]
                 if not i == len(prefixes) - 1:
                     desc += '\n'
 
+    embed = discord.Embed(title="Prefixes", description=desc, color=0xba60f0)
     await ctx.send(embed=embed)
 
 async def remove_prefix(self, ctx, prefix):

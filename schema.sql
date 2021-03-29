@@ -146,38 +146,10 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `time_sent` timestamp NOT NULL
 );
 
-ALTER TABLE `prefixes` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `filters` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `logs` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `muted_users` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `levels` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `autoroles` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `role_assign` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `custom_commands` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `polls` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `nickname_history` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `mutes` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `kicks` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `bans` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `tickets` ADD FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`guild_id`);
-
-ALTER TABLE `messages` ADD FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`);
-
 CREATE UNIQUE INDEX `muted_users_index_0` ON `muted_users` (`guild_id`, `user_id`);
 
 CREATE UNIQUE INDEX `levels_index_1` ON `levels` (`guild_id`, `user_id`);
 
 CREATE UNIQUE INDEX `custom_commands_index_2` ON `custom_commands` (`guild_id`, `command`);
+
+CREATE UNIQUE INDEX `prefixes_index_3` ON `prefixes` (`guild_id`, `prefix`);
