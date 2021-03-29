@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS `guilds` (
-  `guild_id` int UNIQUE PRIMARY KEY NOT NULL,
+  `guild_id` bigint UNIQUE PRIMARY KEY NOT NULL,
   `welcome` text(2000),
   `welcome_chn` varchar(100),
   `rules_chn` varchar(100),
-  `category_id` int,
-  `db_role_id` int,
+  `category_id` bigint,
+  `db_role_id` bigint,
   `verify_en` bit(1) NOT NULL DEFAULT 0,
   `delete_log_en` bit(1) NOT NULL DEFAULT 0,
   `edited_log_en` bit(1) NOT NULL DEFAULT 0,
@@ -17,23 +17,23 @@ CREATE TABLE IF NOT EXISTS `guilds` (
 );
 
 CREATE TABLE IF NOT EXISTS `prefixes` (
-  `guild_id` int PRIMARY KEY NOT NULL,
+  `guild_id` bigint PRIMARY KEY NOT NULL,
   `prefix` char(1) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `counters` (
-  `user_id` int PRIMARY KEY NOT NULL,
+  `user_id` bigint PRIMARY KEY NOT NULL,
   `word` varchar(255) NOT NULL,
   `count` int NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS `filters` (
-  `guild_id` int PRIMARY KEY NOT NULL,
+  `guild_id` bigint PRIMARY KEY NOT NULL,
   `word` varchar(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `logs` (
-  `guild_id` int UNIQUE PRIMARY KEY NOT NULL,
+  `guild_id` bigint UNIQUE PRIMARY KEY NOT NULL,
   `delete_msg_chn` varchar(100),
   `edited_msg_chn` varchar(100),
   `join_chn` varchar(100),
@@ -43,41 +43,41 @@ CREATE TABLE IF NOT EXISTS `logs` (
 );
 
 CREATE TABLE IF NOT EXISTS `muted_users` (
-  `guild_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `guild_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `end_time` timestamp NOT NULL,
   PRIMARY KEY (`guild_id`, `user_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `levels` (
-  `guild_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `guild_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `level` int NOT NULL DEFAULT 0,
   `experience` int NOT NULL DEFAULT 0,
   PRIMARY KEY (`guild_id`, `user_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `autoroles` (
-  `guild_id` int PRIMARY KEY NOT NULL,
-  `role_id` int NOT NULL
+  `guild_id` bigint PRIMARY KEY NOT NULL,
+  `role_id` bigint NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `role_assign` (
-  `guild_id` int PRIMARY KEY NOT NULL,
-  `message_id` int NOT NULL,
-  `emoji_id` int NOT NULL,
-  `role_id` int NOT NULL
+  `guild_id` bigint PRIMARY KEY NOT NULL,
+  `message_id` bigint NOT NULL,
+  `emoji_id` bigint NOT NULL,
+  `role_id` bigint NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `custom_commands` (
-  `guild_id` int PRIMARY KEY NOT NULL,
+  `guild_id` bigint PRIMARY KEY NOT NULL,
   `command` varchar(255) NOT NULL,
   `output` text(2000) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `polls` (
-  `guild_id` int PRIMARY KEY NOT NULL,
-  `message_id` int NOT NULL,
+  `guild_id` bigint PRIMARY KEY NOT NULL,
+  `message_id` bigint NOT NULL,
   `multiselect` bit(1) NOT NULL DEFAULT 1,
   `change_choice` bit(1) NOT NULL DEFAULT 1,
   `end_time` timestamp,
@@ -93,38 +93,38 @@ CREATE TABLE IF NOT EXISTS `polls` (
 );
 
 CREATE TABLE IF NOT EXISTS `name_history` (
-  `user_id` int PRIMARY KEY NOT NULL,
+  `user_id` bigint PRIMARY KEY NOT NULL,
   `name` varchar(1000) NOT NULL,
   `time_changed` timestamp
 );
 
 CREATE TABLE IF NOT EXISTS `nickname_history` (
-  `guild_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `guild_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `name` varchar(1000) NOT NULL,
   `time_changed` timestamp,
   PRIMARY KEY (`guild_id`, `user_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `mutes` (
-  `guild_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `guild_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `reason` varchar(3000) NOT NULL,
   `time` timestamp,
   PRIMARY KEY (`guild_id`, `user_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `kicks` (
-  `guild_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `guild_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `reason` varchar(3000) NOT NULL,
   `time` timestamp,
   PRIMARY KEY (`guild_id`, `user_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `bans` (
-  `guild_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `guild_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `reason` varchar(3000) NOT NULL,
   `time` timestamp,
   PRIMARY KEY (`guild_id`, `user_id`)
@@ -132,16 +132,16 @@ CREATE TABLE IF NOT EXISTS `bans` (
 
 CREATE TABLE IF NOT EXISTS `tickets` (
   `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `guild_id` int NOT NULL,
-  `channel_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `guild_id` bigint NOT NULL,
+  `channel_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `create_time` timestamp NOT NULL,
   `close_time` timestamp NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `messages` (
   `ticket_id` int PRIMARY KEY NOT NULL,
-  `user_id` int NOT NULL,
+  `user_id` bigint NOT NULL,
   `message` varchar(3000) NOT NULL,
   `time_sent` timestamp NOT NULL
 );

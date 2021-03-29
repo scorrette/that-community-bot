@@ -2,41 +2,46 @@ import discord
 
 from discord.ext import commands
 
+async def add_prefix(self, ctx, prefix):
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            print('generating query')
+            query = f"INSERT INTO `prefixes`(`guild_id`, `prefix`) VALUES ({ctx.guild.id}, '{prefix}')"
+            print(f'executing insert: {query}')
+            await cur.execute(query)
+            print('executing commit')
+            await conn.commit()
+
+    print('executing send')
+    await ctx.send(f'`{prefix}` has been added to the prefix list.')
+
+async def list_prefixes(self, ctx):
+    desc = "Below is a list of prefixes set for your server:\n"
+    embed = discord.Embed(title="Prefixes", description=desc, color=0xba60f0)
+
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f'SELECT `prefix` FROM `prefixes` WHERE `guild_id`={ctx.guild.id}')
+            prefixes = await cur.fetchall()
+
+            for i in range(len(prefixes)):
+                desc += prefixes[i]
+                if not i == len(prefixes) - 1:
+                    desc += '\n'
+
+    await ctx.send(embed=embed)
+
+async def remove_prefix(self, ctx, prefix):
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f'DELETE FROM `prefixes` WHERE `guild_id`={ctx.guild.id} AND `prefix`=\'{prefix}\'')
+            await conn.commit()
+
+    await ctx.send(f'`{prefix}` has been removed from the prefix list.')
+
 class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    async def add_prefix(self, ctx, prefix):
-        async with self.bot.pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(f'INSERT INTO `prefixes` (`guild_id`, `prefix`) VALUES ({ctx.guild.id}, \'{prefix}\')')
-                await conn.commit()
-
-        await ctx.send(f'`{prefix}` has been added to the prefix list.')
-
-    async def list_prefixes(self, ctx):
-        desc = "Below is a list of prefixes set for your server:\n"
-        embed = discord.Embed(title="Prefixes", description=desc, color=0xba60f0)
-
-        async with self.bot.pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(f'SELECT `prefix` FROM `prefixes` WHERE `guild_id`={ctx.guild.id}')
-                prefixes = await cur.fetchall()
-
-                for i in range(len(prefixes)):
-                    desc += prefixes[i]
-                    if not i == len(prefixes) - 1:
-                        desc += '\n'
-
-        await ctx.send(embed=embed)
-
-    async def remove_prefix(self, ctx, prefix):
-        async with self.bot.pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(f'DELETE FROM `prefixes` WHERE `guild_id`={ctx.guild.id} AND `prefix`=\'{prefix}\'')
-                await conn.commit()
-
-        await ctx.send(f'`{prefix}` has been removed from the prefix list.')
 
     @commands.command(help="Modify server prefixes")
     async def prefix(self, ctx, option, prefix = None):
