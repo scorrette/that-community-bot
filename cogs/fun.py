@@ -80,5 +80,16 @@ class Fun(commands.Cog):
         except asyncio.TimeoutError:
             await ctx.send("You took too long, cancelling.")
 
+    @commands.command(help="Create a poll")
+    async def counter(self, ctx, option, word = None):
+        if option.lower() == 'add':
+            return
+        elif option.lower() == 'list':
+            return
+        elif option.lower() == 'remove':
+            return
+        else:
+            return
+
 def setup(bot):
     bot.add_cog(Fun(bot))
