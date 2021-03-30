@@ -42,8 +42,8 @@ async def list_counters(self, ctx):
         conn.close()
 
     embed = discord.Embed(title="Counter List", description="Below is a list of the words you are counting:", color=0xba60f0)
-    embed.add_field(name="Words", value=word_list, inline=True)
-    embed.add_field(name="Counts", value=counter_list, inline=True)
+    embed.add_field(name="Word", value=word_list, inline=True)
+    embed.add_field(name="Count", value=counter_list, inline=True)
     await ctx.send(embed=embed)
 
 async def remove_counter(self, ctx, word):
