@@ -7,7 +7,17 @@ from datetime import datetime, timedelta
 from discord.ext import commands
 
 async def add_counter(self, ctx, word):
-    return
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f"SELECT * FROM `counters` WHERE `user_id`={ctx.author.id} AND `word`='{word}'")
+            
+            if cur.rowcount == 0:
+                await cur.execute(f"INSERT INTO `counters`(`user_id`, `word`) VALUES ({ctx.author.id}, '{word}')")
+                await conn.commit()
+
+                await ctx.send(f'`{word}` has been added to the counter list.')
+            else:
+                await ctx.send(f'You already have `{word}` in your counter list.')
 
 async def list_counters(self, ctx):
     return
