@@ -6,6 +6,15 @@ from pytz import timezone
 from datetime import datetime, timedelta
 from discord.ext import commands
 
+async def add_counter(self, ctx, word):
+    return
+
+async def list_counters(self, ctx):
+    return
+
+async def remove_counter(self, ctx, word):
+    return
+
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -80,16 +89,20 @@ class Fun(commands.Cog):
         except asyncio.TimeoutError:
             await ctx.send("You took too long, cancelling.")
 
-    @commands.command(help="Create a poll")
+    @commands.command(help="Create a word counter.")
     async def counter(self, ctx, option, word = None):
         if option.lower() == 'add':
-            return
+            if word == None:
+                await ctx.send('This command expects a word to be passed to it.')
+            else: await add_counter(self, ctx, word)
         elif option.lower() == 'list':
-            return
+            await list_counters(self, ctx)
         elif option.lower() == 'remove':
-            return
+            if word == None:
+                await ctx.send('This command expects a word to be passed to it.')
+            else: await remove_counter(self, ctx, word)
         else:
-            return
+            await ctx.send('You must provide either add, list, or remove as an option.')
 
 def setup(bot):
     bot.add_cog(Fun(bot))
