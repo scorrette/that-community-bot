@@ -33,7 +33,7 @@ async def list_counters(self, ctx):
 
             for i in range(len(words)):
                 word_list += words[i][0]
-                counter_list += words[i][1]
+                counter_list += str(words[i][1])
                 if not i == len(words) - 1:
                     word_list += '\n'
                     counter_list += '\n'
