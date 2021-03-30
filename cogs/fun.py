@@ -19,6 +19,9 @@ async def add_counter(self, ctx, word):
             else:
                 await ctx.send(f'You already have `{word}` in your counter list.')
 
+            await cur.close()
+        conn.close()
+
 async def list_counters(self, ctx):
     return
 
