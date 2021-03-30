@@ -23,7 +23,28 @@ async def add_counter(self, ctx, word):
         conn.close()
 
 async def list_counters(self, ctx):
-    return
+    word_list = ""
+    counter_list = ""
+
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f"SELECT `word`, `count` FROM `counters` WHERE `user_id`={ctx.author.id}")
+            words = await cur.fetchall()
+
+            for i in range(len(words)):
+                word_list += words[i][0]
+                counter_list += words[i][1]
+                if not i == len(words) - 1:
+                    word_list += '\n'
+                    counter_list += '\n'
+
+            await cur.close()
+        conn.close()
+
+    embed = discord.Embed(title="Counter List", description="Below is a list of the words you are counting:", color=0xba60f0)
+    embed.add_field(name="Words", value=word_list, inline=True)
+    embed.add_field(name="Counts", value=counter_list, inline=True)
+    await ctx.send(embed=embed)
 
 async def remove_counter(self, ctx, word):
     return
