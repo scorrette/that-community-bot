@@ -47,7 +47,15 @@ async def list_counters(self, ctx):
     await ctx.send(embed=embed)
 
 async def remove_counter(self, ctx, word):
-    return
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f'DELETE FROM `counters` WHERE `user_id`={ctx.author.id} AND `word`=\'{word}\'')
+            await conn.commit()
+
+            await cur.close()
+        conn.close()
+
+    await ctx.send(f'`{word}` has been removed from the counter list.')
 
 class Fun(commands.Cog):
     def __init__(self, bot):
