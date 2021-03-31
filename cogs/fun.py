@@ -60,7 +60,7 @@ async def remove_counter(self, ctx, word):
 async def update_counter(self, ctx):
     async with self.bot.pool.acquire() as conn:
         async with conn.cursor() as cur:
-            for word in ctx.context.split():
+            for word in ctx.content.split():
                 await cur.execute(f"UPDATE `counters` SET `count`=`count`+1 WHERE `user_id`={ctx.author.id} AND `word`='{word}'")
                 await conn.commit()
 
