@@ -57,6 +57,17 @@ async def remove_counter(self, ctx, word):
 
     await ctx.send(f'`{word}` has been removed from the counter list.')
 
+async def update_counter(self, ctx):
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            for word in ctx.context.split():
+                await cur.execute(f"UPDATE `counters` SET `count`=`count`+1 WHERE `user_id`={ctx.author.id} AND `word`='{word}'")
+                await conn.commit()
+
+            await cur.close()
+        
+        conn.close()
+
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -145,6 +156,10 @@ class Fun(commands.Cog):
             else: await remove_counter(self, ctx, word)
         else:
             await ctx.send('You must provide either add, list, or remove as an option.')
+
+    @commands.Cog.listener()
+    async def on_message(self, ctx):
+        await update_counter(self, ctx)
 
 def setup(bot):
     bot.add_cog(Fun(bot))
