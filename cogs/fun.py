@@ -6,6 +6,68 @@ from pytz import timezone
 from datetime import datetime, timedelta
 from discord.ext import commands
 
+async def add_counter(self, ctx, word):
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f"SELECT * FROM `counters` WHERE `user_id`={ctx.author.id} AND `word`='{word}'")
+            
+            if cur.rowcount == 0:
+                await cur.execute(f"INSERT INTO `counters`(`user_id`, `word`) VALUES ({ctx.author.id}, '{word}')")
+                await conn.commit()
+
+                await ctx.send(f'`{word}` has been added to the counter list.')
+            else:
+                await ctx.send(f'You already have `{word}` in your counter list.')
+
+            await cur.close()
+        conn.close()
+
+async def list_counters(self, ctx):
+    word_list = ""
+    counter_list = ""
+
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f"SELECT `word`, `count` FROM `counters` WHERE `user_id`={ctx.author.id}")
+            words = await cur.fetchall()
+
+            for i in range(len(words)):
+                word_list += words[i][0]
+                counter_list += str(words[i][1])
+                if not i == len(words) - 1:
+                    word_list += '\n'
+                    counter_list += '\n'
+
+            await cur.close()
+        conn.close()
+
+    embed = discord.Embed(title="Counter List", description="Below is a list of the words you are counting:", color=0xba60f0)
+    embed.add_field(name="Word", value=word_list, inline=True)
+    embed.add_field(name="Count", value=counter_list, inline=True)
+    await ctx.send(embed=embed)
+
+async def remove_counter(self, ctx, word):
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f'DELETE FROM `counters` WHERE `user_id`={ctx.author.id} AND `word`=\'{word}\'')
+            await conn.commit()
+
+            await cur.close()
+        conn.close()
+
+    await ctx.send(f'`{word}` has been removed from the counter list.')
+
+async def update_counter(self, ctx):
+    async with self.bot.pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            for word in ctx.content.split():
+                await cur.execute(f"UPDATE `counters` SET `count`=`count`+1 WHERE `user_id`={ctx.author.id} AND `word`='{word}'")
+                await conn.commit()
+
+            await cur.close()
+        
+        conn.close()
+
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -79,6 +141,25 @@ class Fun(commands.Cog):
             # end_time = datetime.today() + end_time_delta
         except asyncio.TimeoutError:
             await ctx.send("You took too long, cancelling.")
+
+    @commands.command(help="Create a word counter.")
+    async def counter(self, ctx, option, word = None):
+        if option.lower() == 'add':
+            if word == None:
+                await ctx.send('This command expects a word to be passed to it.')
+            else: await add_counter(self, ctx, word)
+        elif option.lower() == 'list':
+            await list_counters(self, ctx)
+        elif option.lower() == 'remove':
+            if word == None:
+                await ctx.send('This command expects a word to be passed to it.')
+            else: await remove_counter(self, ctx, word)
+        else:
+            await ctx.send('You must provide either add, list, or remove as an option.')
+
+    @commands.Cog.listener()
+    async def on_message(self, ctx):
+        await update_counter(self, ctx)
 
 def setup(bot):
     bot.add_cog(Fun(bot))

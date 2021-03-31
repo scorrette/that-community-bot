@@ -28,6 +28,8 @@ async def get_prefix(bot, ctx):
             for prefix in _prefixes:
                 prefixes += prefix
 
+        conn.close()
+
     return prefixes
 
 async def set_prefix(bot, ctx):
@@ -48,6 +50,9 @@ async def query(ctx, *, q):
             await cur.execute(q)
             res = await cur.fetchall()
             await ctx.send(str(res))
+
+            await cur.close()
+        conn.close()
 
 @bot.event
 async def on_ready():
