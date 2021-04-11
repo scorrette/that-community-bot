@@ -12,6 +12,8 @@ async def on_raw_reaction_add(self, payload):
     message = await channel.fetch_message(payload.message_id)
     member = channel.guild.get_member(payload.user_id)
     emoji = payload.emoji
+    if emoji.name == '\:thumbsup:' and emoji.message.channel.id == 818537648515448872: #change to rules channel ID 
+        member.add_role(818549791009144892, reason=None, atomic=True) #change role ID
 
 @commands.Cog.listener()
 async def on_member_join(member):
